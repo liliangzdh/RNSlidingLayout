@@ -7,43 +7,121 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {Platform, StyleSheet, Text, View, Animated, ScrollView} from 'react-native';
+import {ScrollContent, SplitTabs} from "./app/components/split_tabs";
+import TalkView from "./app/TalkView";
+import {Colors} from './app/themes';
+import TalkView2 from "./app/TalkView2";
 
 type Props = {};
 export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
-  }
+
+
+    AnimatedVal = new Animated.Value(0);
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            // animating: true,
+            isShow: false,
+            currentPage: 0,
+            hidehead: false
+            // _AnimatedVal:  new Animated.Value(0)
+        }
+    }
+
+    render() {
+        return (
+            <View style={[{flex:1}]}>
+
+                <ScrollView
+                    stickyHeaderIndices={[1]}
+                    scrollEventThrottle={1}
+                    bounces={false}
+                    showsVerticalScrollIndicator={false}
+                    onScroll={this.scroll}>
+
+
+                    {/*<Image*/}
+                    {/*resizeMode="stretch"*/}
+                    {/*style={{position: 'absolute', width: '100%', height: 150}}*/}
+                    {/*source={Images.user_center_bg}/>*/}
+
+                    <View style={[
+                        {
+                            height: 200,
+                            alignItems: 'center',
+                            backgroundColor: 'red',
+                            flexDirection:"row"
+                        }]}>
+
+
+                    </View>
+
+
+                    <SplitTabs
+                        ref="SplitTabs"
+                        tabs={['栏目1', '栏目2'] }
+                        backgroundColor={Colors.baseColor}
+                        activeTabColor={Colors.color_white}
+                        defaultColor={'#ffffff82'}
+                        underLineWidth={0}
+                        selectedTab={this.state.currentPage}
+                        changeTabs={ (index) => {
+                            Animated.timing(
+                                this.AnimatedVal,
+                                {
+                                    toValue: index,
+                                    duration: 100,
+                                    useNativeDriver: true
+                                }
+                            ).start();
+                            this.setState({
+                                currentPage: index
+                            })
+                        }}/>
+
+
+                    <ScrollContent
+                        AnimatedVal={this.AnimatedVal}
+                        currentPage={this.state.currentPage}>
+
+                        <TalkView
+                            ref={'TalkView'}
+                            tabLabel="栏目1"
+                            onScroll={this.scroll}/>
+
+
+                        <TalkView2
+                            ref={'TalkView'}
+                            tabLabel="栏目2"
+                            onScroll={this.scroll}/>
+
+
+
+                    </ScrollContent>
+
+
+                </ScrollView>
+            </View>
+        );
+    }
+
+
+    scroll = (event) => {
+        let y = event.nativeEvent.contentOffset.y;
+        let height = event.nativeEvent.layoutMeasurement.height;
+        let contentHeight = event.nativeEvent.contentSize.height;
+        if (y + height >= contentHeight - 20) {
+            this.refs['TalkView'].loadNet(true);
+        }
+        if (y > 100) {
+            //设置颜色
+            //this.refs['SplitTabs'].setBgColor(Colors.baseColor);
+        } else {
+            //设置透明
+            //this.refs['SplitTabs'].setBgColor('#ffffff00');
+        }
+    }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
