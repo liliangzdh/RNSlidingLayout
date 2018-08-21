@@ -13,7 +13,7 @@ export default class TalkView extends Component {
     constructor() {
         super();
         let data = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             data.push(i);
         }
         this.state = {data: data}
@@ -54,6 +54,11 @@ export default class TalkView extends Component {
 
 
     loadNet = (flag) => {
+        let data = this.state.data;
+        for (let i = 0; i < 10; i++) {
+            data.push(i);
+        }
+        this.setState({data:data});
 
     }
 }

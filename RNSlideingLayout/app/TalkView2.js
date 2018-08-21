@@ -13,7 +13,7 @@ export default class TalkView2 extends Component {
     constructor() {
         super();
         let data = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             data.push(i);
         }
         this.state = {data: data}
@@ -42,7 +42,7 @@ export default class TalkView2 extends Component {
 
                                 <Text
                                     style={{color: 'white', fontSize: 20}}>
-                                    {item}
+                                    {index}
                                 </Text>
                             </View>
                         )
@@ -54,6 +54,11 @@ export default class TalkView2 extends Component {
 
 
     loadNet = (flag) => {
+        let data = this.state.data;
+        for (let i = 0; i < 10; i++) {
+            data.push(i);
+        }
+       this.setState({data:data});
 
     }
 }
