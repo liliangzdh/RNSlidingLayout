@@ -6,15 +6,15 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Animated, ScrollView} from 'react-native';
+import React, {Component} from "react";
+import {Animated, ScrollView, View} from "react-native";
 import {ScrollContent, SplitTabs} from "./app/components/split_tabs";
 import TalkView from "./app/TalkView";
-import {Colors} from './app/themes';
+import {Colors} from "./app/themes";
 import TalkView2 from "./app/TalkView2";
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
 
     AnimatedVal = new Animated.Value(0);
